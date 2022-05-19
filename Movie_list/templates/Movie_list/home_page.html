@@ -1,0 +1,20 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<div class="home-container">
+  <a href="{% url 'add-movie' %}">Add Movie</a>
+  {{user.total_score_from_own_reviews}}
+
+  {% for movie in movies %}
+    <a href="{% url 'movie' movie.id %}"><h3>{{movie.title_pl}}</h3></a>
+    <h5>{{movie.title_eng}}</h5>
+    <span>{{movie.year}} | {{movie.runtime}} | {{movie.director}}</span>
+    <h1>rating: {{movie.avg_rating}}</h1>
+
+
+    <small>added on {{movie.added}} by {{movie.user}}</small>
+    <hr>
+  {% endfor %}
+</div>
+
+{% endblock content %}

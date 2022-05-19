@@ -1,0 +1,65 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="room-container">
+  <h1>{{movie.title_pl}}</h1>
+  <h3>{{movie.title_eng}}</h3>
+  <h4>Rating: {{avg_rating}}</h4>
+  <span>{{movie.year}} | {{movie.runtime}} | {{movie.director}}</span>
+  <h1>{{movie.movie_avg_rating}}</h1>
+  <small>added on {{movie.added}} by {{movie.user}}</small>
+  <hr>
+  <div class="comment-wrapper">
+    {% for review in reviews %}
+        <div>
+          {% if request.user == review.user %}
+          <a href="{% url 'delete-review' review.id %}">Delete</a>
+          {% endif %}
+          <small>@{{review.user}}    {{review.created|timesince}} ago</small>
+          <p>{{review.rating_value}}</p>
+          <p>{{review.body}}</p>
+          <small>Review rated: {{review.total_vote}}</small>
+          
+          <span>
+            <form method="POST" action="{% url 'vote-review' review.pk 'upvote' %}">
+              {% csrf_token %}
+              <input type="submit", value="Upvote"></input>
+            </form>
+            <form method="POST" action="{% url 'vote-review' review.pk 'downvote' %}">
+              {% csrf_token %}
+              <input type="submit", value="Downvote"></input>
+            </form>
+          </span>
+
+          <div>
+            {% for comment in review.comments %}
+            <div>
+              <small>{{comment.user}}</small>
+              <p>{{comment.body}}</p>
+            </div>
+            {% endfor %}
+          </div>
+
+
+          <hr>
+        </div>
+    {% endfor %}
+  </div>
+  
+  {% if request.user.is_authenticated %}
+  <div class="comment-form">
+    <form method="POST" action="">
+      {% csrf_token %}
+      <input type="text" name="body" placeholder="Write review here">
+
+      <label for="rating-value">Rate the movie:</label>
+      <input type="number" id="rating-value" name="rating-value" min="1" max="10">
+
+      <input type="Submit" value="Submit">
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

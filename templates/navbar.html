@@ -1,0 +1,27 @@
+<!-- {% load static %} -->
+
+<header>
+  <a href="{% url 'home-page' %}" class="header-logo">LOGO</a>
+
+  <form class="header-searchbar" method="GET" action="{% url 'home-page' %}">
+    <label>
+      <input name="q" placeholder="Search for movies..." />
+    </label>
+  </form>
+
+  <nav class="header-menu">
+    {% if request.user.is_authenticated %}
+    <div class="header-user">
+      <a href="{% url 'user-profile' request.user.id %}">
+        <p>{{request.user}}</p>
+      </a>
+    </div>
+
+    <a href="{% url 'logout' %}" class="dropdown-link">Logout</a>
+    
+    {% else %}
+    <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+
+  </nav>
+</header>

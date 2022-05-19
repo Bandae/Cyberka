@@ -1,0 +1,20 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h1>{{user}}</h1>
+
+{% for review in reviews %}
+  <div>
+    {% if request.user == review.user %}
+    <a href="{% url 'delete-review' review.id %}">Delete</a>
+    {% endif %}
+    
+    <small>@{{review.user}}    {{review.created|timesince}} ago</small>
+    <p>{{review.body}}</p>
+    <small>{{review.total_vote}}</small>
+    <hr>
+  </div>
+{% endfor %}
+
+{% endblock content %}
